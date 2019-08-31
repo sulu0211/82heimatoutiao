@@ -84,13 +84,23 @@ export default {
         if (isOk) {
           // 通过axios请求获取
           // axios中data中放置body参数 params是放置地址参数的
-          // this.$axios({
-          //   url:'',
-          //   method:'post',
-          // })
-          this.$message({ type: 'success', message: '成功' })
-        } else {
-          this.$message({ type: 'warning', message: '失败' })
+          this.$axios({
+            url: '/authorizations',
+            method: 'post',
+            data: this.loginForm
+          }).then(result => {
+            // console.log(result)
+            // 放到前端缓存中
+            window.localStorage.setItem('user-token', result.data.data.token)
+            // 编程式导航
+            this.$router.push('/') // 登陆成功 跳转到home页
+          }).catch(() => {
+            this.$massage({
+              message: '手机号或者验证码错误',
+              type: 'warning'
+            })
+          })
+          // this.$message({ type: 'success', message: '成功' })
         }
       }
 

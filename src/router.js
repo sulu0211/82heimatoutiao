@@ -1,10 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Home from './views/home'
 import Login from './views/login'
-import axios from 'axois'
 
-Vue.prototype.$http = axios
 Vue.use(Router)
 
 export default new Router({
@@ -17,6 +15,10 @@ export default new Router({
   },
   {
     path: '/',
+    redirect: '/home'
+  },
+  {
+    path: '/home',
     name: 'home',
     component: Home
   }
