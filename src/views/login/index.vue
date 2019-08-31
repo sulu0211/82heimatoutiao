@@ -5,19 +5,19 @@
         <img src="../../assets/img/logo_index.png" alt="">
       </div>
       <!-- 表单组件 -->
-      <el-form>
+      <el-form  :model="loginForm" :rules="loginRules">
          <!-- 表单项 -->
-         <el-form-item>
+         <el-form-item prop="mobile">
            <!-- 放置组件内容 -->
-           <el-input></el-input>
+           <el-input placeholder="请输入手机号" v-model="loginForm.mobile"></el-input>
          </el-form-item>
-         <el-form-item>
-            <el-input style='width:260px'></el-input>
+         <el-form-item prop="code" >
+            <el-input v-model="loginForm.code" style='width:260px' placeholder="请输入验证码"></el-input>
             <el-button style='float:right'>发送验证码</el-button>
          </el-form-item>
          <!-- 选择框 -->
-         <el-form-item>
-           <el-checkbox>
+         <el-form-item prop="check">
+           <el-checkbox v-model="loginForm.check">
              我已阅读并同意用户协议和隐私条款
            </el-checkbox>
          </el-form-item>
@@ -34,7 +34,45 @@
 
 <script>
 export default {
+  data () {
+    let validator = function (rule, value, callBack) {
+      if (value) {
+        callBack()// 如果value位true直接跳过
+      } else {
+        callBack(new Error('您必须无条件同意'))
+      }
+    }
+    return {
+      loginForm: {
+        mobile: '', // 手机号
+        code: '', // 验证码
+        check: false // 是否勾选协议
+      },
+      // 定义rules去校验规则，表单是根据规则校验 没有规则 就没有校验
+      // key（字段名):value（数组对象=>对个=>一个字段可能否有一个或者多个校验规则）
+      loginRules: {
+        mobile: [{
+          required: true, // 意味着必填
+          message: '手机号不能为空' // 如果没有满足要求 就会提示message的内容
+        }, {
+          pattern: /^1[3456789]\d{9}$/, // 正则表达式
+          message: '手机号格式不正确'
+        }],
+        code: [{
+          required: true,
+          message: '验证码不能为空'
+        }, {
+          pattern: /^\d{6}$/,
+          message: '验证码必须为6位数字'
+        }],
+        check: [{
+          validator
+        }]
 
+      }
+
+    }
+  }
 }
 </script>
 
