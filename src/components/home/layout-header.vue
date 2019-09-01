@@ -5,12 +5,12 @@
       <span>江苏传智播客教育科技股份有限公司</span>
     </el-col>
     <el-col :span="3" class="right">
-      <img class="head-img" src="../../assets/img/avatar.jpg" alt />
+      <img class="head-img" :src="userInfo.photo ? userInfo.photo : defaultImg" alt />
       <!-- 下拉菜单 -->
       <el-dropdown trigger="click">
         <!-- 匿名插槽 -->
         <span class="el-dropdown-link">
-          all is well
+          {{userInfo.name}}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <!-- 具名插槽 -->
@@ -25,7 +25,31 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      userInfo: {},
+      defaultImg:
+     require('../../assets/img/avatar.jpg')// 转成base64 字符串
+    }
+  },
+  methods: {
+    // 获取用户数据
+    getUserInfo () {
+      let token = window.localStorage.getItem('user-token') // 获取token
+      this.$axios({
+        url: '/user/profile',
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).then(result => {
+        this.userInfo = result.data.data
+        // console.log(result)
+      })
+    }
+  },
+  created () {
+    this.getUserInfo()
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -47,6 +71,8 @@ export default {}
     .head-img {
       border-radius: 50%;
       margin-right: 5px;
+      height: 40px;
+      width: 40px;
     }
   }
 }
