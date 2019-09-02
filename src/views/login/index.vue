@@ -91,14 +91,9 @@ export default {
           }).then(result => {
             // console.log(result)
             // 放到前端缓存中
-            window.localStorage.setItem('user-token', result.data.data.token)
+            window.localStorage.setItem('user-token', result.data.token)
             // 编程式导航
             this.$router.push('/') // 登陆成功 跳转到home页
-          }).catch(() => {
-            this.$massage({
-              message: '手机号或者验证码错误',
-              type: 'warning'
-            })
           })
           // this.$message({ type: 'success', message: '成功' })
         }
