@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-
+    <!-- 达可鸭 -->
   </div>
 </template>
 
@@ -15,5 +15,7 @@ export default {
       height: 100vh;
       background-image: url("../../assets/img/home.jpg");
       background-size:cover;
+      // font-size:40px;
+      // background: orange;
   }
 </style>

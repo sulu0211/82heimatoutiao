@@ -1,27 +1,28 @@
 <template>
 
-  <el-row type="flex" class="layout-header" justify="space-between">
-    <el-col :span="6" class="left">
-      <i class="el-icon-s-unfold icon"></i>
-      <span>江苏传智播客教育科技股份有限公司</span>
-    </el-col>
-    <el-col :span="3" class="right">
-      <img class="head-img" :src="userInfo.photo ? userInfo.photo : defaultImg" alt />
-      <!-- 下拉菜单 -->
-      <el-dropdown trigger="click"  @command="handleMenuItem">
-        <!-- 匿名插槽 -->
-        <span class="el-dropdown-link">
-          {{userInfo.name}}
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-        <!-- 具名插槽 -->
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="account">个人信息</el-dropdown-item>
-          <el-dropdown-item command="git">git地址</el-dropdown-item>
-          <el-dropdown-item command="lgout">退出</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </el-col>
+  <!-- 用el-row el-col -->
+  <el-row class='layout-header' type='flex' justify='space-between'>
+      <!-- span是给col的宽度  elementUI将页面分为24分 -->
+      <el-col class='left' :span="6">
+          <i class='el-icon-s-unfold icon'></i>
+          <span>江苏传智播客教育科技股份有限公司</span>
+      </el-col>
+      <el-col :span="3" class='right'>
+        <!-- 属性不给:就相当于字符串 -->
+          <img class='head-img' :src="userInfo.photo ? userInfo.photo : defaultImg" alt="">
+     <el-dropdown trigger="click"  @command="handleMenuItem">
+         <!-- 匿名插槽 -->
+       <span class="el-dropdown-link">
+          {{userInfo.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+       </span>
+       <!-- 具名插槽 -->
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item command='account'>个人信息</el-dropdown-item>
+        <el-dropdown-item command='git'>git地址</el-dropdown-item>
+        <el-dropdown-item command='lgout'>退出</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+      </el-col>
   </el-row>
 </template>
 
@@ -72,25 +73,27 @@ export default {
 <style lang="less" scoped>
 .layout-header {
   display: flex;
-  align-items: center;
-  .left {
-    .icon {
-      font-size: 22px;
-      margin-right: 3px;
+     align-items: center;
+    padding: 8px 0;
+    .left {
+     .icon {
+        font-size:22px;
+        margin-right:3px;
+     }
+     span{
+      font-size:14px;
+     }
+
     }
-    span {
-      font-size: 12px;
+    .right {
+      display: flex;
+      align-items: center;
+       .head-img {
+          border-radius: 50%;
+          margin-right:5px;
+          width:40px;
+          height:40px;
+      }
     }
-  }
-  .right {
-    display: flex;
-    align-items: center;
-    .head-img {
-      border-radius: 50%;
-      margin-right: 5px;
-      height: 40px;
-      width: 40px;
-    }
-  }
 }
 </style>
