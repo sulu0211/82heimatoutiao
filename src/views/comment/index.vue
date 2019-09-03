@@ -43,7 +43,7 @@ export default {
           // 修改文章状态 Method： PUT
           method: 'put',
           url: '/comments/status',
-          params: { article_id: row.id }, // 传递article_id参数
+          params: { article_id: row.id.toString() }, // 传递article_id参数
           data: {
             allow_comment: !row.comment_status // 取反，因为当前如果是true 只能改成false，如果是false改为true
           }
