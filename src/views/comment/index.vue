@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading="loading">
     <!-- 插槽内容 -->
     <bread-crumb slot="header">
       <!-- 面包屑的具名插槽 -->
@@ -14,7 +14,7 @@
       <el-table-column label="操作" style="padding-rigth:0">
         <template slot-scope="obj">
           <el-button size="small" type="text">修改评论</el-button>
-          <el-button
+          <el-button @click="openOrClose(obj.row)"
             size="small"
             :style='{color : obj.row.comment_status ? "#E6A23C" :"#409EFF"}'
             type="text"
@@ -29,10 +29,31 @@
 export default {
   data () {
     return {
+
       list: []
     }
   },
   methods: {
+    // 打开或者关闭
+    openOrClose (row) {
+      let mess = row.comment_status ? '关闭' : '打开'
+      this.$confirm(`您是否要${mess}评论？`, '提示').then(() => {
+        // 写调用接口
+        this.$axios({
+          // 修改文章状态 Method： PUT
+          method: 'put',
+          url: '/comments/status',
+          params: { article_id: row.id }, // 传递article_id参数
+          data: {
+            allow_comment: !row.comment_status // 取反，因为当前如果是true 只能改成false，如果是false改为true
+          }
+
+        }).then(result => {
+          this.getComments()// 成功之后 重新调用 拉去数据的方法
+        })
+      })
+    },
+    // formatter 用来格式化内容Function(row, column, cellValue, index)
     formatter (row) {
       return row.comment_status ? '正常' : '关闭'
     },
