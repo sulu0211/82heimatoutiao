@@ -26,6 +26,12 @@ export default new Router({
       path: '', // 默认的二级路由的地址path为空串
       component: Main
     }]
+  },
+  {
+    path: 'material',
+    component: () =>
+                import('./views/material/index.vue')
+
   }
     // {
     //   path: '/about',
