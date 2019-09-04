@@ -29,6 +29,9 @@ export default new Router({
     {
       path: '/home/comment',
       component: () => import('./views/comment')
+    }, {
+      path: '/home/articles',
+      component: () => import('./views/articles')
     }]
   }
     // {

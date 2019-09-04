@@ -22,7 +22,16 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <el-row type="flex" justify="center" style="margin:10px 0">
+       <!-- 分页组件  current-page当前页码 每页显示多少条 page-size total 总数 -->
+       <el-pagination  background layout="prev, pager, next" :total="1000">
+
+</el-pagination>
+    </el-row>
+
   </el-card>
+
 </template>
 
 <script>

@@ -7,7 +7,7 @@ import jsonBigInt from 'json-bigint'
 // 统一处理大数字类型
 axios.defaults.transformResponse = [function (data) {
   // data 响应回来的字符串
-  // debugger
+  debugger
   // return JSON.parse(data)
   return jsonBigInt.parse(data)
 }]
@@ -26,7 +26,7 @@ axios.interceptors.request.use(function (config) {
 // 响应拦截器
 axios.interceptors.response.use(function (response) {
   // 对响应数据做处理
-  // debugger
+  debugger
   // console.log(response)
   return response.data ? response.data : {}
 }, function (error) {
