@@ -32,6 +32,9 @@ export default new Router({
     }, {
       path: '/home/articles',
       component: () => import('./views/articles')
+    }, {
+      path: '/home/material',
+      component: () => import('./views/material')
     }]
   }
     // {
