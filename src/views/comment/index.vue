@@ -51,7 +51,7 @@ export default {
     changePage (newPage) {
       // 给当前页码更新最新值
       this.page.page = newPage
-      this.getComments()// 获取最新页码的数据
+      this.getComments()// 获取页码最新
     },
     // 打开或者关闭
     openOrClose (row) {
@@ -77,6 +77,7 @@ export default {
       return row.comment_status ? '正常' : '关闭'
     },
     getComments () {
+      this.loading = true // 请求数据之前 把进度条打开
       this.$axios({
         // query相当于路径参数。get参数。url参数 放在params中
         // body参数放在data中
@@ -84,6 +85,7 @@ export default {
         params: { response_type: 'comment', page: this.page.page, per_page: this.page.pageSize }
       }).then(result => {
         // console.log(result)
+        this.loading = false // 响应数据之后加载进度条
         this.list = result.data.results
         this.page.total = result.data.total_count
       })
