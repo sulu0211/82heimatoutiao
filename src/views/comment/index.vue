@@ -24,8 +24,8 @@
     </el-table>
 
     <el-row type="flex" justify="center" style="margin:10px 0">
-       <!-- 分页组件  current-page当前页码 每页显示多少条 page-size total 总数 -->
-       <el-pagination  background layout="prev, pager, next" :total="1000">
+       <!-- 分页组件  current-page当前页码 每页显示多少条 page-size每页显示的条数 total 总数 -->
+       <el-pagination  @current-change="changePage" :current-page="page.page" :page-size="page.pageSize" :total="page.total"  background layout="prev, pager, next">
 
 </el-pagination>
     </el-row>
@@ -38,11 +38,21 @@
 export default {
   data () {
     return {
-
-      list: []
+      list: [],
+      page: {
+        page: 1,
+        pageSize: 10,
+        total: 0
+      }
     }
   },
   methods: {
+    // 点击页码更新当前页面数据
+    changePage (newPage) {
+      // 给当前页码更新最新值
+      this.page.page = newPage
+      this.getComments()// 获取最新页码的数据
+    },
     // 打开或者关闭
     openOrClose (row) {
       let mess = row.comment_status ? '关闭' : '打开'
@@ -71,10 +81,11 @@ export default {
         // query相当于路径参数。get参数。url参数 放在params中
         // body参数放在data中
         url: '/articles',
-        params: { response_type: 'comment' }
+        params: { response_type: 'comment', page: this.page.page, per_page: this.page.pageSize }
       }).then(result => {
         // console.log(result)
         this.list = result.data.results
+        this.page.total = result.data.total_count
       })
     }
   },

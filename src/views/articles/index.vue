@@ -95,10 +95,10 @@ export default {
 
 <style lang="less" scoped>
 .total-info {
-    border-bottom:1px dashed #ccc;
-    padding:20px 0;
-    color:#323745;
-    font-size:14px;
+  border-bottom: 1px dashed #ccc;
+  padding: 20px 0;
+  color: #323745;
+  font-size: 14px;
 }
 .article-list {
   .article-item {
