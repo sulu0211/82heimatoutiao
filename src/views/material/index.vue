@@ -5,15 +5,15 @@
             素材管理
         </template>
       </bread-crumb>
-      <el-tabs v-model="activeName">
-    <el-tab-pane label="全部素材" name="all">
+      <el-tabs v-model="activeName" @tab-click="changeTab">
+      <el-tab-pane label="全部素材" name="all">
       <!-- 全部素材内容 -->
       <!-- {{list.length}} -->
       <div class="card-list">
         <el-card v-for="item in list" :key="item.id" class="img-card">
            <img :src="item.url" alt="">
            <div type="flex" justify="space-around" class="operate" align="middle">
-              <i class="el-icon-star-on"></i>
+              <i :style="{color:item.is_collected ? 'red' : ''}" class="el-icon-star-on"></i>
               <i class="el-icon-delete-solid"></i>
            </div>
         </el-card>
@@ -21,6 +21,15 @@
     </el-tab-pane>
     <el-tab-pane label="收藏图片" name="collect">
       <!-- 收藏素材内容 -->
+      <div class="card-list">
+        <el-card v-for="item in list" :key="item.id" class="img-card">
+           <img :src="item.url" alt="">
+           <div type="flex" justify="space-around" class="operate" align="middle">
+              <i :style="{color:item.is_collected ? 'red' : ''}" class="el-icon-star-on"></i>
+              <i class="el-icon-delete-solid"></i>
+           </div>
+        </el-card>
+      </div>
     </el-tab-pane>
   </el-tabs>
   </el-card>
@@ -31,15 +40,27 @@ export default {
   data () {
     return {
       activeName: 'all',
-      list: []
+      list: [],
+
+      page: {
+        page: 1
+
+      }
     }
   },
   methods: {
+    // 切换页签
+    changeTab () {
+      // this.activeName是最新的页签
+      // 加载不同类型的数据 all=》所有的数据 collect=》去加载收藏数据
+      this.getMaterial()
+    },
     getMaterial () {
       this.$axios({
         url: '/user/images',
         params: {
-          collect: false
+          // collect: false
+          collect: this.activeName === 'collect'// collect 为true时是加载收藏页面，为false是全部加载页面
         }
       }).then(result => {
         this.list = result.data.results
