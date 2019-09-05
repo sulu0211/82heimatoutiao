@@ -53,7 +53,7 @@
             <i class="el-icon-edit"></i>修改
           </span>
           <span>
-            <i class="el-icon-delete"></i>删除
+            <i @click="delItem(item)" class="el-icon-delete"></i>删除
           </span>
         </div>
       </div>
@@ -93,6 +93,21 @@ export default {
     }
   },
   methods: {
+    // 删除数据
+    delItem (item) {
+      console.log(1)
+      this.$confirm('您是否要删除此文章?', '提示').then(() => {
+        // 确定删除
+        // item.id 长度大于安全限制=》bigNumber类型=> toString()形成正确的结构
+        this.$axios({
+          method: 'delete',
+          url: `/articles/${item.id.toString()}`
+        }).then(() => {
+          // 重新拉取数据
+          this.getConditionArticle()// 获取筛选的数据
+        })
+      })
+    },
     // 改变页码
     changePage (newPage) {
       this.page.page = newPage // 赋值新页码
