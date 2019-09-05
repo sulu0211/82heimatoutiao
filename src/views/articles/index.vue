@@ -7,7 +7,7 @@
     <el-form style="margin-left:40px">
       <el-form-item label="文章状态：">
         <!-- {{searchForm.status}} -->
-        <el-radio-group v-model="searchForm.status">
+        <el-radio-group @change="changeConditon" v-model="searchForm.status">
           <el-radio :label="5">全部</el-radio>
           <el-radio :label="0">草稿</el-radio>
           <el-radio :label="1">待审核</el-radio>
@@ -17,22 +17,24 @@
       </el-form-item>
       <el-form-item label="频道列表：">
         <!-- {{searchForm.channels_id}} -->
-        <el-select v-model="searchForm.channels_id">
+        <el-select @change="changeConditon" v-model="searchForm.channels_id">
           <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="时间选择：">
         <!-- {{searchForm.dataRange}} -->
         <el-date-picker
-          value-format='yyyy-MM-dd'
-          v-model="searchForm.dataRange"
+          @change="changeConditon"
+          value-format="yyyy-MM-dd"
+          v-model="searchForm.dateRange"
           type="daterange"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         ></el-date-picker>
       </el-form-item>
     </el-form>
-    <div class="total-info">共找到1459条符合条件的内容</div>
+    {{searchForm}}
+    <div class="total-info">共找到{{page.total}}条符合条件的内容</div>
     <div class="article-list">
       <!-- 循环项 -->
       <div class="article-item" v-for="(item,index) in list" :key="index">
@@ -41,7 +43,7 @@
           <img :src="item.cover.images.length ? item.cover.images[0] : defaultImg" alt />
           <div class="info">
             <span class="title">{{item.title}}</span>
-            <el-tag style="width:60px">已发布</el-tag>
+            <el-tag :type="item.status | statusType" style="width:60px">{{item.status | statusText}}</el-tag>
             <span class="date">{{item.pubdate}}</span>
           </div>
         </div>
@@ -56,6 +58,18 @@
         </div>
       </div>
     </div>
+    <!-- 分页 -->
+    <el-row type="flex" justify="center" style="margin:10px 0">
+      <!-- 分页组件  current-page当前页码 每页显示多少条 page-size每页显示的条数 total 总数 -->
+      <el-pagination
+        @current-change="changePage"
+        :current-page="page.page"
+        :page-size="page.pageSize"
+        :total="page.total"
+        background
+        layout="prev, pager, next"
+      ></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -67,13 +81,69 @@ export default {
       defaultImg: require('../../assets/img/404.png'), // base64字符串
       searchForm: {
         status: 5, // 状态
-        channels_id: null, // 频道
-        dataRange: [] // 数组【开始时间，结束时间】
+        channel_id: null, // 频道
+        dateRange: [] // 数组【开始时间，结束时间】
       },
-      channels: [] // 存放频道列表数据
+      channels: [], // 存放频道列表数据
+      page: {
+        page: 1,
+        pageSize: 10,
+        total: 0
+      }
     }
   },
   methods: {
+    // 改变页码
+    changePage (newPage) {
+      this.page.page = newPage // 赋值新页码
+      this.getConditionArticle() // 获取筛选的数据
+    },
+    // 改变搜索条件时
+    changeConditon () {
+      this.page.page = 1 // 默认回到第一页
+      this.getConditionArticle() // 获取筛选的数据
+    },
+    // 根据条件查询数据
+    getConditionArticle () {
+      // u组合条件+页码  状态/频道/日期区间/ 每页条数/页码
+      let params = {
+        status: this.searchForm.status === 5 ? null : this.searchForm.status,
+        channel_id: this.searchForm.channel_id,
+        begin_pubdate:
+          this.searchForm.dateRange.length > 0
+            ? this.searchForm.dateRange[0]
+            : null,
+        end_pubdate:
+          this.searchForm.dateRange.length > 1
+            ? this.searchForm.dateRange[1]
+            : null,
+        page: this.page.page,
+        per_page: this.page.pageSize
+      }
+      this.getArtcles(params)
+    },
+
+    // 文章状态
+    // changeRadio() {
+    //   this.$axios({
+    //     url: "/articles",
+    //     params: {
+    //       status: this.searchForm.status === 5 ? null : this.searchForm.status,
+    //       channel_id: this.searchForm.channel_id,
+    //       begin_pubdate:
+    //         this.searchForm.dateRange.length > 0
+    //           ? this.searchForm.dateRange[0]
+    //           : null,
+    //       end_pubdate:
+    //         this.searchForm.dateRange.length > 1
+    //           ? this.searchForm.dateRange[1]
+    //           : null
+    //     }
+    //   }).then(result => {
+    //     this.list = result.data.results;
+    //   });
+    //   // alert(this.searchForm.status)
+    // },
     // 获取频道
     getChannels () {
       this.$axios({
@@ -82,11 +152,14 @@ export default {
         this.channels = result.data.channels
       })
     },
-    getArtcles () {
+    // 查询文章列表内容
+    getArtcles (params) {
       this.$axios({
-        url: '/articles'
+        url: '/articles',
+        params
       }).then(result => {
         this.list = result.data.results
+        this.page.total = result.data.total_count
       })
     }
   },
@@ -106,6 +179,21 @@ export default {
           return '已发表'
         case 3:
           return '审核失败'
+        default:
+          break
+      }
+    },
+    // 定义类型过滤器
+    statusType: function (value) {
+      switch (value) {
+        case 0:
+          return 'warning'
+        case 1:
+          return 'info'
+        case 2:
+          return 'success'
+        case 3:
+          return 'danger'
         default:
           break
       }
