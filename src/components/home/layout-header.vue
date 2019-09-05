@@ -10,6 +10,8 @@
       <el-col :span="3" class='right'>
         <!-- 属性不给:就相当于字符串 -->
           <img class='head-img' :src="userInfo.photo ? userInfo.photo : defaultImg" alt="">
+          <!-- <img class='head-img' :src="defaultImg" alt=""> -->
+
      <el-dropdown trigger="click"  @command="handleMenuItem">
          <!-- 匿名插槽 -->
        <span class="el-dropdown-link">
@@ -30,9 +32,9 @@
 export default {
   data () {
     return {
-      userInfo: {},
-      defaultImg:
-     require('../../assets/img/avatar.jpg')// 转成base64 字符串
+      userInfo: {
+      },
+      defaultImg: require('../../assets/img/avatar.jpg')// 转成base64 字符串
     }
   },
   methods: {

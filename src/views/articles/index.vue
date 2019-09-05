@@ -6,12 +6,13 @@
     <!-- 搜索工具栏 -->
     <el-form style="margin-left:40px">
       <el-form-item label="文章状态：">
-        <el-radio-group>
-          <el-radio>全部</el-radio>
-          <el-radio>草稿</el-radio>
-          <el-radio>待审核</el-radio>
-          <el-radio>审核通过</el-radio>
-          <el-radio>审核失败</el-radio>
+        {{searchForm.status}}
+        <el-radio-group v-model="searchForm.status">
+          <el-radio :label="5">全部</el-radio>
+          <el-radio :label="0">草稿</el-radio>
+          <el-radio :label="1">待审核</el-radio>
+          <el-radio :label="2">审核通过</el-radio>
+          <el-radio :label="3">审核失败</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="频道列表：">
@@ -58,7 +59,10 @@ export default {
   data () {
     return {
       list: [], // 定义一个空数组
-      defaultImg: require('../../assets/img/404.png') // base64字符串
+      defaultImg: require('../../assets/img/404.png'), // base64字符串
+      searchForm: {
+        status: 5
+      }
     }
   },
   methods: {
