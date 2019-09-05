@@ -6,7 +6,7 @@
     <!-- 搜索工具栏 -->
     <el-form style="margin-left:40px">
       <el-form-item label="文章状态：">
-        {{searchForm.status}}
+        <!-- {{searchForm.status}} -->
         <el-radio-group v-model="searchForm.status">
           <el-radio :label="5">全部</el-radio>
           <el-radio :label="0">草稿</el-radio>
@@ -16,12 +16,17 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="频道列表：">
-        <el-select></el-select>
+        <!-- {{searchForm.channels_id}} -->
+        <el-select v-model="searchForm.channels_id">
+          <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="时间选择：">
+        <!-- {{searchForm.dataRange}} -->
         <el-date-picker
-          type="datetimerange"
-          range-separator="至"
+          value-format='yyyy-MM-dd'
+          v-model="searchForm.dataRange"
+          type="daterange"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         ></el-date-picker>
@@ -61,11 +66,22 @@ export default {
       list: [], // 定义一个空数组
       defaultImg: require('../../assets/img/404.png'), // base64字符串
       searchForm: {
-        status: 5
-      }
+        status: 5, // 状态
+        channels_id: null, // 频道
+        dataRange: [] // 数组【开始时间，结束时间】
+      },
+      channels: [] // 存放频道列表数据
     }
   },
   methods: {
+    // 获取频道
+    getChannels () {
+      this.$axios({
+        url: '/channels'
+      }).then(result => {
+        this.channels = result.data.channels
+      })
+    },
     getArtcles () {
       this.$axios({
         url: '/articles'
@@ -76,6 +92,7 @@ export default {
   },
   created () {
     this.getArtcles()
+    this.getChannels()
   },
   filters: {
     // 定义一个过滤器
