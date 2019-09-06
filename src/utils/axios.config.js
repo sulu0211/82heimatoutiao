@@ -1,6 +1,6 @@
 // 放置axios拦截器 请求拦截器和响应拦截器
 import axios from 'axios'
-import router from '../router'
+import router from '../permission'
 import { Message } from 'element-ui' // 单独引入提示消息
 import jsonBigInt from 'json-bigint'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'// 赋值基本地址
@@ -53,7 +53,7 @@ axios.interceptors.response.use(function (response) {
       router.push('/login')
       break
     default:
-      console.log(error)
+      // console.log(error)
       message = '未知错误'
       break
   }
@@ -61,8 +61,9 @@ axios.interceptors.response.use(function (response) {
   return new Promise(function () {}) // 直接返回一个promise 表示错误已经被处理掉 相当于强行截止错误
   // return Promise.reject(error)
 })
-export default {
-  install (Vue) {
-    Vue.prototype.$axios = axios
-  }
-}
+// export default {
+//   install (Vue) {
+//     Vue.prototype.$axios = axios
+//   }
+// }
+export default axios

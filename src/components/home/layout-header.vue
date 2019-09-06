@@ -1,5 +1,4 @@
 <template>
-
   <!-- 用el-row el-col -->
   <el-row class='layout-header' type='flex' justify='space-between'>
       <!-- span是给col的宽度  elementUI将页面分为24分 -->
@@ -32,8 +31,7 @@
 export default {
   data () {
     return {
-      userInfo: {
-      },
+      userInfo: {},
       defaultImg: require('../../assets/img/avatar.jpg')// 转成base64 字符串
     }
   },
@@ -45,8 +43,8 @@ export default {
         url: '/user/profile'
         // headers: { 'Authorization': `Bearer ${token}` }
       }).then(result => {
-        this.userInfo = result.data.data
-        console.log(result)
+        this.userInfo = result.data
+        // console.log(result)
       })
     },
     // 点击菜单项触发方法
@@ -64,7 +62,6 @@ export default {
         this.$router.push('/login') // 跳转到登录页
       }
     }
-
   },
   created () {
     this.getUserInfo()
@@ -74,9 +71,9 @@ export default {
 
 <style lang="less" scoped>
 .layout-header {
-  display: flex;
+     display: flex;
      align-items: center;
-    padding: 8px 0;
+     padding: 8px 0;
     .left {
      .icon {
         font-size:22px;
@@ -85,7 +82,6 @@ export default {
      span{
       font-size:14px;
      }
-
     }
     .right {
       display: flex;

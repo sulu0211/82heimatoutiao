@@ -4,8 +4,8 @@
       <template slot="title">素材管理</template>
     </bread-crumb>
     <!-- 上传组件 -->
-    <el-upload action="" :http-request="uploadImg" :show-file-list="false">
-      <el-button size="small" type="primary" class="upload-btn">上传图片</el-button>
+    <el-upload action="" :http-request="uploadImg" :show-file-list="false" class="upload-btn">
+      <el-button size="small" type="primary">上传图片</el-button>
     </el-upload>
     <el-tabs v-model="activeName" @tab-click="changeTab">
       <el-tab-pane label="全部素材" name="all">
@@ -14,14 +14,14 @@
         <div class="card-list">
           <el-card v-for="item in list" :key="item.id" class="img-card">
             <img :src="item.url" alt />
-            <div type="flex" justify="space-around" class="operate" align="middle">
+            <el-row type="flex" justify="space-around" class="operate" align="middle">
               <i
-                @click="collectOrCancel"
+                @click="collectOrCancel(item)"
                 :style="{color:item.is_collected ? 'red' : ''}"
                 class="el-icon-star-on"
               ></i>
               <i @click="delImg(item)" class="el-icon-delete-solid"></i>
-            </div>
+            </el-row>
           </el-card>
         </div>
       </el-tab-pane>
@@ -33,18 +33,18 @@
           </el-card>
         </div>
       </el-tab-pane>
+      <!-- 分页 -->
+      <el-row type="flex" justify="center">
+        <el-pagination
+          @current-change="changePage"
+          :current-page="page.page"
+          :page-size="page.pageSize"
+          :total="page.total"
+          background
+          layout="prev, pager, next"
+        ></el-pagination>
+      </el-row>
     </el-tabs>
-    <!-- 分页 -->
-    <el-row type="flex" justify="center">
-      <el-pagination
-        @current-change="changePage"
-        :current-page="page.page"
-        :page-size="page.pageSize"
-        :total="page.total"
-        background
-        layout="prev, pager, next"
-      ></el-pagination>
-    </el-row>
   </el-card>
 </template>
 <script>
@@ -61,34 +61,33 @@ export default {
     }
   },
   methods: {
-    // 上传图片
+    // 选择完图片之后执行
     uploadImg (params) {
       // formdata类型
-      console.log(1)
       let obj = new FormData()
       obj.append('image', params.file)
       this.$axios({
-        url: '/user/images',
+        url: '/user/images', // 同样的地址 不同的类型
         method: 'post',
         data: obj
       }).then(() => {
-        this.getMaterial()
+        this.getMaterial() // 重新加载
       })
     },
     // 收藏或取消图片
-    // collectOrCancel (item) {
-    //   let mess = item.is_collected ? '取消' : ''
-    //   this.$confirm(`您确定要${mess}收藏这张图片？`, '提示').then(() => {
-    //     // 确定收藏或者去收藏
-    //     this.$axios({
-    //       url: `/user/images/${item.id}`,
-    //       method: 'put',
-    //     //   data: { collect: !item.is_collected } // 取反
-    //     // }).then(() => {
-    //     //   get.getMaterial()
-    //     // })
-    //   // })
-    // },
+    collectOrCancel (item) {
+      let mess = item.is_collected ? '取消' : ''
+      this.$confirm(`您确定要${mess}收藏这张图片？`, '提示').then(() => {
+        // 确定收藏或者去收藏
+        this.$axios({
+          url: `/user/images/${item.id}`,
+          method: 'put',
+          data: { collect: !item.is_collected } // 取反
+        }).then(() => {
+          this.getMaterial() // 重新加载
+        })
+      })
+    },
     // 删除图片
     delImg (item) {
       this.$confirm('您确定要删除此图片吗?', '提示').then(() => {

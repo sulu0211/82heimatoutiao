@@ -7,12 +7,9 @@ import Main from './views/home/main.vue'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
   routes: [{
     path: '/login',
     component: Login
-
   },
   {
     path: '/',
@@ -38,6 +35,9 @@ export default new Router({
     }, {
       path: '/home/publish',
       component: () => import('./views/publish')
+    }, {
+      path: '/home/account',
+      component: () => import('./views/account')
     }]
   }
     // {

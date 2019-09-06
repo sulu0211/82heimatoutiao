@@ -17,7 +17,7 @@
       </el-form-item>
       <el-form-item label="频道列表：">
         <!-- {{searchForm.channels_id}} -->
-        <el-select @change="changeConditon" v-model="searchForm.channels_id">
+        <el-select @change="changeConditon" v-model="searchForm.channel_id">
           <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
@@ -49,11 +49,11 @@
         </div>
         <!-- 右侧内容 -->
         <div class="right">
-          <span>
+          <span @click="modifyItem(item)" >
             <i class="el-icon-edit"></i>修改
           </span>
-          <span>
-            <i @click="delItem(item)" class="el-icon-delete"></i>删除
+          <span @click="delItem(item)">
+            <i class="el-icon-delete"></i>删除
           </span>
         </div>
       </div>
@@ -93,18 +93,21 @@ export default {
     }
   },
   methods: {
-    // 删除数据
+    // 修改数据
+    modifyItem (item) {
+      this.$router.push(`/home/publish/${item.id.toString()}`)
+    },
+    //  删除数据
     delItem (item) {
-      console.log(1)
       this.$confirm('您是否要删除此文章?', '提示').then(() => {
         // 确定删除
-        // item.id 长度大于安全限制=》bigNumber类型=> toString()形成正确的结构
+        // item.id 长度超过安全限制 => bigNumber类型 => toString() 形成正确的结构
         this.$axios({
           method: 'delete',
           url: `/articles/${item.id.toString()}`
         }).then(() => {
           // 重新拉取数据
-          this.getConditionArticle()// 获取筛选的数据
+          this.getConditionArticle() // 获取筛选的数据
         })
       })
     },
@@ -180,7 +183,7 @@ export default {
   },
   created () {
     this.getArtcles()
-    this.getChannels()
+    this.getChannels() // 获取频道数据
   },
   filters: {
     // 定义一个过滤器
