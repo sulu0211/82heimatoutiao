@@ -3,8 +3,7 @@
     <bread-crumb slot="header">
       <template slot="title">发布文章</template>
     </bread-crumb>
-    <!-- {{formData}} -->
-    <!-- 表单 model数据对象 rules 绑定规则 -->
+    <!-- 表单 model 数据对象  rules 绑定规则 -->
     <el-form
       ref="publishForm"
       :model="formData"
@@ -16,7 +15,7 @@
         <el-input v-model="formData.title" style="width:400px"></el-input>
       </el-form-item>
       <el-form-item prop="content" label="内容">
-        <el-input v-model="formData.content" type="textarea" :rows="4"></el-input>
+        <quill-editor v-model="formData.content" type="textarea" ></quill-editor>
       </el-form-item>
       <el-form-item label="封面">
         <el-radio-group v-model="formData.cover.type">
@@ -26,6 +25,13 @@
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
       </el-form-item>
+      <!-- 封面组件 -->
+
+      <el-form-item>
+            <!-- 封面图片组件 -->
+            <!-- <cover-image>qqq</cover-image> -->
+      </el-form-item>
+
       <el-form-item prop="channel_id" label="频道">
         <el-select v-model="formData.channel_id">
           <!-- label(显示值)  value(真实值) -->
@@ -33,13 +39,12 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="publish">发表文章</el-button>
-        <el-button>存入草稿</el-button>
+        <el-button @click="publish(false)" type="primary">发表文章</el-button>
+        <el-button @click="publish(true)">存入草稿</el-button>
       </el-form-item>
     </el-form>
   </el-card>
 </template>
-
 <script>
 export default {
   data () {
@@ -77,22 +82,24 @@ export default {
     }
   },
   methods: {
+    // 发布草稿
     // 发布文章
-    publish () {
+    publish (draft) {
       this.$refs.publishForm.validate(isOk => {
         if (isOk) {
           this.$axios({
             url: '/articles',
             method: 'post',
-            params: { draft: false },
+            params: { draft }, // draft 为true时 就是草稿
             data: this.formData
           }).then(() => {
             // 编程式导航
-            this.$router.push('/home/articles') // 跳转到文章列表页面
+            this.$router.push('/home/articles')
           })
         }
       })
     },
+
     // 频道
     getChannels () {
       this.$axios({

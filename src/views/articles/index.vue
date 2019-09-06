@@ -93,6 +93,7 @@ export default {
     }
   },
   methods: {
+
     // 修改数据
     modifyItem (item) {
       this.$router.push(`/home/publish/${item.id.toString()}`)
@@ -180,6 +181,7 @@ export default {
         this.page.total = result.data.total_count
       })
     }
+
   },
   created () {
     this.getArtcles()
