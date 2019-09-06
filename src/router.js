@@ -27,17 +27,23 @@ export default new Router({
       path: '/home/comment',
       component: () => import('./views/comment')
     }, {
+      // 内容管理
       path: '/home/articles',
       component: () => import('./views/articles')
     }, {
       path: '/home/material',
       component: () => import('./views/material')
     }, {
+      // 发布文章
       path: '/home/publish',
       component: () => import('./views/publish')
     }, {
       path: '/home/account',
       component: () => import('./views/account')
+    }, {
+      // 修改文章
+      path: 'publish/:articledId', // 定义动态路由参数
+      component: () => import('./views/publish')
     }]
   }
     // {
