@@ -42,7 +42,7 @@ export default new Router({
       component: () => import('./views/account')
     }, {
       // 修改文章
-      path: 'publish/:articledId', // 定义动态路由参数
+      path: 'publish/:articleId', // 定义动态路由参数
       component: () => import('./views/publish')
     }]
   }

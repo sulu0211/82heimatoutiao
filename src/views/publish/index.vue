@@ -5,7 +5,13 @@
     </bread-crumb>
     <!-- {{formData}} -->
     <!-- 表单 model数据对象 rules 绑定规则 -->
-    <el-form ref="publishForm" :model="formData" :rules="publishRules" style="margin-left:100px" label-width="100px">
+    <el-form
+      ref="publishForm"
+      :model="formData"
+      :rules="publishRules"
+      style="margin-left:100px"
+      label-width="100px"
+    >
       <el-form-item prop="title" label="标题">
         <el-input v-model="formData.title" style="width:400px"></el-input>
       </el-form-item>
@@ -73,7 +79,7 @@ export default {
   methods: {
     // 发布文章
     publish () {
-      this.$refs.publishForm.validate((isOk) => {
+      this.$refs.publishForm.validate(isOk => {
         if (isOk) {
           this.$axios({
             url: '/articles',
@@ -94,10 +100,23 @@ export default {
       }).then(result => {
         this.channels = result.data.channels
       })
+    },
+    // 通过id获取文章详情
+    getArticlById (articleId) {
+      this.$axios({
+        url: `/articles/${articleId}`
+      }).then(result => {
+        this.formData = result.data
+      })
     }
   },
   created () {
     this.getChannels()
+    let { articleId } = this.$route.params // 获取id
+    if (articleId) {
+      // 如果存在 修改文章 通过id 获取当前的文章数据
+      this.getArticlById(articleId)
+    }
   }
 }
 </script>
