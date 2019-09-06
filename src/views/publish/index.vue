@@ -15,10 +15,11 @@
         <el-input v-model="formData.title" style="width:400px"></el-input>
       </el-form-item>
       <el-form-item prop="content" label="内容">
-        <quill-editor v-model="formData.content" type="textarea" ></quill-editor>
+        <quill-editor v-model="formData.content" style="height:400px;width:800px"></quill-editor>
       </el-form-item>
-      <el-form-item label="封面">
-        <el-radio-group v-model="formData.cover.type">
+      <el-form-item label="封面" style="margin-top:120px">
+        <!-- 监听 radio的监听事件-->
+        <el-radio-group v-model="formData.cover.type" @change="changeCoverType">
           <el-radio :label="1">单图</el-radio>
           <el-radio :label="3">三图</el-radio>
           <el-radio :label="0">无图</el-radio>
@@ -28,8 +29,8 @@
       <!-- 封面组件 -->
 
       <el-form-item>
-            <!-- 封面图片组件 -->
-            <!-- <cover-image>qqq</cover-image> -->
+        <!-- 封面图片组件 -->
+        <!-- <cover-image>qqq</cover-image> -->
       </el-form-item>
 
       <el-form-item prop="channel_id" label="频道">
@@ -82,6 +83,16 @@ export default {
     }
   },
   methods: {
+    // 切换封面类型
+    changeCoverType () {
+      if (this.formData.cover.type === 1) {
+        this.formData.cover.images = ['http://toutiao.meiduo.site/FkVT6ht7pbABI4jtk2A_zrH1yVpK'] // 有一张封面 待选择
+      } else if (this.formData.cover.type === 3) {
+        this.formData.cover.images = ['http://toutiao.meiduo.site/FkVT6ht7pbABI4jtk2A_zrH1yVpK', 'http://toutiao.meiduo.site/FkVT6ht7pbABI4jtk2A_zrH1yVpK', 'http://toutiao.meiduo.site/FkVT6ht7pbABI4jtk2A_zrH1yVpK'] // 有三张封面 待选择
+      } else {
+        this.formData.cover.images = [] // 自动或者无图 没有内容
+      }
+    },
     // 发布草稿
     // 发布文章
     publish (draft) {
