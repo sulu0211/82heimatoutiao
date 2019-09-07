@@ -30,7 +30,7 @@
 
       <el-form-item>
         <!-- 封面图片组件 -->
-        <!-- <cover-image>qqq</cover-image> -->
+        <cover-image :images="formData.cover.images"></cover-image>
       </el-form-item>
 
       <el-form-item prop="channel_id" label="频道">
@@ -83,12 +83,12 @@ export default {
     }
   },
   methods: {
-    // 切换封面类型
+    // 切换封面类型 根据当前类型决定images结构
     changeCoverType () {
       if (this.formData.cover.type === 1) {
-        this.formData.cover.images = ['http://toutiao.meiduo.site/FkVT6ht7pbABI4jtk2A_zrH1yVpK'] // 有一张封面 待选择
+        this.formData.cover.images = [''] // 有一张封面 待选择
       } else if (this.formData.cover.type === 3) {
-        this.formData.cover.images = ['http://toutiao.meiduo.site/FkVT6ht7pbABI4jtk2A_zrH1yVpK', 'http://toutiao.meiduo.site/FkVT6ht7pbABI4jtk2A_zrH1yVpK', 'http://toutiao.meiduo.site/FkVT6ht7pbABI4jtk2A_zrH1yVpK'] // 有三张封面 待选择
+        this.formData.cover.images = ['', '', ''] // 有三张封面 待选择
       } else {
         this.formData.cover.images = [] // 自动或者无图 没有内容
       }
