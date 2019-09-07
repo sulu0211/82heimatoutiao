@@ -1,10 +1,15 @@
 <template>
-  <el-card>
+  <el-card v-loading="loading">
       <bread-crumb slot='header'>
          <template slot='title'>
              账户信息
          </template>
       </bread-crumb>
+      <!--此处使用自定义上传实现http-request-->
+      <el-upload action="" :http-request="uploadHeadImg" :show-file-list="false">
+        <img :src="userInfo.photo || defaultImg" alt="" class="head-img">
+      </el-upload>
+
       <el-form ref="userForm" :model="userInfo" :rules="userRules" label-width="100px">
           <el-form-item label="用户名" prop="name">
               <el-input v-model="userInfo.name" style='width:300px'></el-input>
@@ -29,6 +34,8 @@
 export default {
   data () {
     return {
+      loading: false,
+      defaultImg: require('../../assets/img/404.png'),
       userInfo: {
         name: '',
         intro: '',
@@ -53,6 +60,20 @@ export default {
     }
   },
   methods: {
+    // 上传用户头像
+    uploadHeadImg (params) {
+      this.loading = true // 显示进度
+      let data = new FormData()
+      data.append('photo', params.file)
+      this.$axios({
+        method: 'patch',
+        url: '/user/photo',
+        data
+      }).then(() => {
+        this.loading = false // 关闭进度条
+        this.getUserInfo()
+      })
+    },
     getUserInfo () {
       this.$axios({
         url: '/user/profile'
@@ -84,6 +105,14 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+.head-img{
+  position: absolute;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  right:200px;
+
+}
 
 </style>
