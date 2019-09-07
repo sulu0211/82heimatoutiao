@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/events' // 公共的vue实例
 export default {
   data () {
     return {
@@ -71,6 +72,7 @@ export default {
         data
       }).then(() => {
         this.loading = false // 关闭进度条
+        eventBus.$emit('updateUserInfo') // 相当于打出电话
         this.getUserInfo()
       })
     },
@@ -93,6 +95,8 @@ export default {
               type: 'success',
               message: '恭喜您保存用户信息成功'
             })
+            // 成功之后 要通知 头部去更新数据
+            eventBus.$emit('updateUserInfo') // 相当于打出了一个电话 电话号是updateUserInfo
           })
         }
       })
