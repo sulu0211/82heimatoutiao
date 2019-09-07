@@ -1,5 +1,7 @@
 //
 import router from './router'
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
 router.beforeEach(function (to, from, next) {
   // 如果要去的地方地址以/home为起始，就说明需要判断当前是不是登陆 判断token‘
   if (to.path.startsWith('/home')) {
@@ -14,6 +16,10 @@ router.beforeEach(function (to, from, next) {
     // 如果没有/home 可以认为你是安全的 不需要控制的页面
     next()
   }
+})
+
+router.afterEach(function () {
+  nprogress.done() // 关闭进度条
 })
 // 将router暴露出来
 export default router
