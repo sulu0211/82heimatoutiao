@@ -1,11 +1,7 @@
 <template>
-  <el-tabs >
+  <el-tabs v-model="activeName">
     <el-tab-pane label="全部素材" name="all">
-       <div class="img-list">
-           <el-card>
-               <img src="" alt="">
-           </el-card>
-       </div>
+
     </el-tab-pane>
     <el-tab-pane label="上传图片" name="upload">
 
@@ -15,7 +11,11 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      activeName: 'all'
+    }
+  }
 }
 </script>
 
