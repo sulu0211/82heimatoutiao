@@ -1,3 +1,4 @@
+
 <template>
   <div class='cover-image'>
       <!-- 注册图片点击事件 -->
