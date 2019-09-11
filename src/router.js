@@ -28,6 +28,10 @@ export default new Router({
       component: Main
     },
     {
+      path: 'fansdata',
+      component: () => import('./views/fans/fansdata')
+    },
+    {
       path: '/home/comment',
       component: () => import('./views/comment')
     }, {
