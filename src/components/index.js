@@ -1,8 +1,6 @@
 import layoutAside from './home/layout-aside'
 import layoutHeader from './home/layout-header'
 import breadCrumb from './common/bread-crumb'
-// import coverImage from './publish/cover-image.vue'
-// import selectImage from './publish/select-image'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'

@@ -22,7 +22,7 @@ export default {
   data () {
     return {
       activeName: 'all',
-      list: [], // 全部
+      list: [], // 全部素材的数组
       page: {
         page: 1,
         pageSize: 8,
@@ -34,7 +34,9 @@ export default {
     // 选择一张图片
     selectImg (item) {
       // 获取点击图片的地址 item.url
-      alert(item.url)
+      // alert(item.url)
+      // this.$emit 触发一个自定义事件
+      this.$emit('onSelectImg', item.url)
     },
     changePage (newPage) {
       this.page.page = newPage
@@ -49,6 +51,7 @@ export default {
           per_page: this.page.pageSize
         }
       }).then(result => {
+        console.log(result)
         this.list = result.data.results // list
         this.page.total = result.data.total_count // 图片总数
       })
