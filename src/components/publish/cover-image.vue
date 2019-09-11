@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     receiveImg (url) {
-      alert(`我是${url}`)
+      // alert(`我是${url}`)
       this.$emit('onClickImg', url, this.selectIndex)
       this.dialogVisbile = false
     },
